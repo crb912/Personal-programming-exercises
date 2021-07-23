@@ -1,13 +1,15 @@
-1. Source
+1.Source
 
 This Project is only for my personal study purpose, and it is derived from the web page:
-    `CS:APP3e Web Asides`_, providing by Randal E. Bryant and David R. O’Hallaron.
+`CS:APP3e Web Asides`_ (providing by Randal E. Bryant and David R. O’Hallaron).
 
 
-Click on the document in the above webpage: ASM:EASM_— Combining assembly code with C code
+Click on the document in the above webpage: 
+
+ASM:EASM_— Combining assembly code with C code
 
 
-2. Program Example
+2.Program Example
 
 The code examples of the project are directly from from the handout -- *Combining assembly code with C code*. These codes can be directly compiled with Cmake tool successfully.
 
