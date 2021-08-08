@@ -1,0 +1,415 @@
+The response to my last column shows that at least some want it to continue. I think it important that readers remember that everything in ACCU publications is provided free. The principal reward that writers get is that warm fuzzy feeling that the time they have spent in writing has, in some way, made someone else’s life better. Even in the days when I was a paid columnist for the now long defunct .EXE Magazine, the response of readers meant more to me than the monthly cheque.
+
+Before I get on with the responses, I want to take a few minutes of your time to reflect on homework.
+
+When I was a very young teacher my Head of Department advised me to think carefully about the value of homework. It should not be a sop to the conscience of pupils who have idled during the day and even less should it be a service to parents who want some reason to get their children out of the way.
+
+He went on to remark that the very concept of homework was, in today’s terminology, exclusive. To manual workers the word ‘homework’ is synonymous with ‘housework’. It is professionals, white-collar workers, artists, writers and the like who do some or even all their work at home. The current pandemic has only served to underline this further.
+
+His final comment was that homework, of the repetitive kind, all too often resulted in re-enforcing misunderstanding. His conclusion was that, wherever possible, homework should have positive value.
+
+I took that advice into the rest of my teaching career and tried, not always successfully, to find tasks to be done outside the classroom. Ideally, these tasks should have multiple objectives.
+
+Here is an example. I used to set my computer studies pupils a project that entailed writing a review of a piece of software of their choice. One year my union had called me out on strike for an afternoon. The next day I asked my CS class what they had done with their half day off.
+
+‘It was great’ they declared.
+
+‘Yes’ I said, ‘You got an extra holiday.’
+
+‘No’ they responded and went on to explain that because it was a mid-week afternoon and shops were less busy, they had been able to go to interview various shop managers about what software sold and what was important for it to sell successfully.
+
+Think about that. Fifteen year-olds, most not particularly academic, choosing to use some unexpected leisure time to do ‘homework’.
+
+So back to this column. I realised from one response that my previous challenges have been too restricted. These days C Vu has had little for the inexperienced. That has concerned me for several years. In the beginning, many members and not a few contributors were very far from experts. I doubt that is true today. We need to be more inclusive, not just in the current colloquial sense but in the broader one that includes all those interested in programming from raw novice to world authority.
+
+So the revised specification for future homework challenges is to contribute a solution as one of the following:
+
+An ideal and transparent program that is easy to follow.
+An obscure solution that would alert a tutor/teacher that this is unlikely to be the work of a student
+A student solution (by someone who wants to give it a go)
+That third category is important as it opens it up to all rather than just those who believe themselves to be experts.
+
+You will find the next homework challenge at the end of this column, but now to the submissions for the last one.
+
+I deliberately, with malice aforethought, chose ‘geometric mean’.
+
+From Silas Brown
+This time our lazy student forgot to say which language they need their code in, so here’s one in the ZSH language, which I hope no sensible tutor would accept:
+
+unset a s;while [ "$a" != END ];do s+=($a);read -d ' ' a;done;echo $[(${(j:*:)s})**(1.0/${#s})]
+Every space in the code is important, and I’ve also assumed each input value is to be followed by a space (omit the -d ' ' if newlines are to be used in the input instead).
+
+And when the student comes back with, “No, I forgot to say it has to be C++,” we give them this, which I also hope no tutor would accept:
+
+  #include <iostream>
+  #include <math.h>
+  #include <numeric>
+  #include <iterator>
+  using namespace std;
+  double d,s=0;
+  int main() {
+    try { accumulate
+        (istream_iterator<string>(cin),
+         istream_iterator<string>(),0.0,
+         [](double a,string b)->double {
+           if(b=="END") throw 0;
+           return ++s,d=a+=log(stof(b));});
+    } catch(int) { cout << exp(d/s); }
+  }
+Francis: Just for once, Silas walked into the trap and forgot to check the input for invalid data.
+
+From James Holland
+Before I give my offering for HW4, it was interesting to note that Silas’s ingenious one-statement solution to HC3 (C Vu 33.1 – March 2021) works just as well without casting the signature of toupper.
+
+As for HW4, the following code is supposedly from a student. He said he wanted to keep the declaration of line within the scope of the while-loop. Confining scope is easily achieved when using if-statements, switch-statements and for-loops because they can have initialise clauses, but not the while-loop. The student wanted to know why this was so. To get over the problem, the student used a lambda expression. I wondered whether this was the best approach.
+
+The student told me that he remembers reading something about it being best to add floating point numbers from the smallest first. When asked, the student could not give a convincing answer as to how his code worked. Did he really write the code himself?
+
+Francis: Of course this does not matter because he has calculated the arithmetic mean so his solution will almost invariably give the wrong answer. I guess he just asked his helper for a mean, ignorant of the fact that there are several (the common ones being arithmetic, geometric and harmonic).
+
+Helpfully, it was pointed out by the student that a number to be averaged must appear alone on each line and that there is operator-error checking.
+
+  #include <iostream>
+  #include <numeric>
+  #include <set>
+  #include <sstream>
+  int main()
+  {
+    std::multiset<double> numbers;
+    while ([& numbers] {
+      std::string line;
+      std::getline(std::cin, line);
+      if (line == "END") return false;
+      std::istringstream ss(line);
+      double number;
+      ss >> number;
+      numbers.insert(number);
+      return true;
+    }()){}
+    std::cout << std::accumulate(numbers.begin(),
+      numbers.end(), 0.0) / numbers.size() << '\n';
+  }
+From Tim Kent
+In an effort to keep your super column going, please accept my entry for Homework Challenge 4.
+
+I wouldn’t expect all of the following from a run-of-the mill student:
+
+Encapsulate the Geometric Mean algorithm in a library for future code reuse
+Namespace for library
+const correctness
+Use of noexcept
+Logarithmic algorithm for calculating geometric mean to avoid overflow
+Template class to allow for different types of mean accumulators (float, double, long double)
+Error handling
+Clear feedback to the user on stderr if there are errors.
+Returning an errorlevel
+The use of [[nodiscard]] to prevent the return value from being unused by the caller to try to avoid bugs.
+Tim’s code is in Listing 1.
+
+#pragma once
+namespace tck{
+template<typename T>
+class GeometricMean {
+public:
+  void addSample(long double sample) {
+    if (sample <= 0) throw std::range_error(
+      "Samples must be positive for Geometric "
+      "Mean.");
+    m_accumulator += log(sample);
+    ++m_count;
+  }
+  void clear() noexcept {
+  m_accumulator = 0.0;
+    m_count = 0;
+  }
+  [[nodiscard]]
+  T get() const noexcept {
+    return exp(m_accumulator / m_count);
+  }
+private:
+  T m_accumulator = 0.0;
+  int m_count = 0;
+};
+}
+#include ”geometric_mean.h”
+#include <string>
+#include <iostream>
+int main() {
+  try {
+    GeometricMean<long double> mean;
+    std::string line;
+    std::cout << "END - to end.\n\n";
+    while (std::getline(std::cin, line)
+       && line != "END") {
+      try {
+        const auto number = std::stold(line);
+        mean.addSample(number);
+        std::cout << "Current geometric mean: "
+                  << mean.get() << '\n';
+      }
+      catch (const std::exception &ex) {
+        std::cerr
+        << "Skipped input because expecting a "
+          "positive floating point number or "
+          "\"END\" but received \""
+        << line << "\"\n";
+      }
+    }
+  }
+  catch(const std::exception& ex)
+  {
+    std::cerr << "The following unexpected "
+      "error is causing the program to exit: " 
+      << ex.what() << '\n';
+    return 1;
+  }
+  return 0;
+}
+			
+Listing 1
+From Tony McClelland
+Thank you for setting the Homework Challenge, and for spurring me into offering an entry. I don’t know about the ‘run-of-the-mill student’ criterion, I don’t think there is anything fancy about my solution.
+
+I have tried to make the data entry and calculation of the geometric mean reasonably fault-tolerant.
+
+Lines longer than 80 characters are truncated.
+It is a fatal error if fgets() returns NULL. I wonder if it might be better to treat this as a premature END?
+Negative numbers are not allowed, and I have treated this as a fatal error.
+An inadvertent blank line (pressing ENTER twice or more) is silently ignored. This was a little tricky because strtod() would treat that line as a representation of 0.0 and the calculation would then yield 0.0. Other invalid input results in a message and an invitation to try again.
+It always feels a little odd to treat the product of an empty sequence of numbers as 1.0. Hence the comment about the multiplicative identity.
+Thank you, I had fun with this.
+
+Tony’s code is in Listing 2, overleaf.
+
+#include <stdio.h> 
+#include <stdlib.h> 
+#include <stdbool.h> 
+#include <string.h> 
+#include <math.h> 
+#include <ctype.h> 
+
+// Function prototypes 
+void read_line(char *lineptr, int n); 
+bool all_whitespace(const char *line); 
+bool valid_number(const char *line,
+  double *xptr); 
+double geometric_mean(void); 
+
+/* If the user enters a line longer than 80 characters, it will be truncated. This should be plenty to enter a numeric string. */
+#define LINE_LENGTH  80 
+int main(void) { 
+  // Prompt to enter numbers separated by newline
+  // and terminated by END 
+  puts("Calculation of geometric mean"); 
+  puts("Enter numbers (one per line) and type "
+    "END to finish..."); 
+  double gmean = geometric_mean(); 
+  printf("The geometric mean is: %e\n", gmean); 
+  return EXIT_SUCCESS; 
+} 
+// Read a line of up to n characters followed by a 
+// '\n' from stdin into the string pointed to by 
+// lineptr. If an error occurs, print a message and 
+// terminate the program. 
+void read_line(char *lineptr, int n) { 
+  // n+1 characters so as to include '\n' 
+  // at the end 
+  if (fgets(lineptr, n + 1, stdin) == NULL) { 
+    fputs("I/O error\n", stderr); 
+    exit(EXIT_FAILURE); 
+  } 
+} 
+// Check if a string contains only whitespace
+bool all_whitespace(const char *line) { 
+  int length = strlen(line); 
+  for (int i = 0; i < length; ++i) 
+    if (!isspace(line[i])) 
+      return false; 
+  return true; 
+} 
+// Attempt to convert the string line into a 
+// double-precision floating-point number.
+// The string can contain leading and/or trailing
+// whitespace.
+ bool valid_number(const char *line, double *xptr) { 
+  if (all_whitespace(line)) 
+    return false; 
+  char *endptr;   // ptr to 1st char after
+                  // converted numeric string 
+  double val = strtod(line, &endptr); 
+
+  // Whitespace after the numeric string is OK, 
+  // anything else is an invalid numeric string 
+  while (*endptr != '\0') { 
+    if (!isspace(*endptr)) 
+      return false; 
+    ++endptr; 
+  }
+ 
+  // String was a valid number 
+  *xptr = val; 
+  return true; 
+} 
+
+// Calculate the geometric mean of numbers
+// entered from stdin 
+double geometric_mean(void) { 
+  double product = 1.0;  // product of numbers
+                         // received 
+  int count = 0;  // count of numbers received 
+
+  // The string line is long enough to hold
+  // LINE_LENGTH characters plus 
+  // a '\n' and '\0' terminator. 
+  char line[LINE_LENGTH + 2]; 
+
+  read_line(line, LINE_LENGTH); 
+  while (strcmp(line, "END\n") != 0) { 
+    double x;         // value read from stdin 
+    if (valid_number(line, &x)) { 
+      if (x == 0.0)   // A sequence including 0 
+                      // has geometric mean 0 
+        return 0.0; 
+      else if (x < 0.0) { 
+        puts("The geometric mean is defined only for positive numbers"); 
+        exit(EXIT_FAILURE); 
+      } 
+      product *= x; 
+      ++count; 
+    } 
+    else 
+      puts("Please enter only a number or "
+        "END\n"); 
+    read_line(line, LINE_LENGTH); 
+  } 
+  // If at least 1 valid number was entered,
+  // return the geometric mean. Otherwise return
+  // the multiplicative identity (1.0)
+  if (count > 0) 
+    return pow(product, 1.0 / count); 
+  else 
+    return 1.0; 
+}
+			
+Listing 2
+From Gary Taverner
+Francis: This is the one that made me realise that I needed to be more inclusive.
+
+I joined the ACCU last Christmas. I enjoy getting my copies of {C Vu} and Overload. I was dismayed to see that you were about to stop issuing the homework challenge. Though I’m not a spring chicken, I’ve only spent the last six years working as a developer. Before that I was an avid reader of books about C++. I made the mistake often of trying to understand every last detail before trying to do something. The homework challenge is just the sort of thing I could use to motivate myself and learn faster.
+
+I would like to tender my submission for preview even though I’m not sure that it is ironic enough. I’m not entirely sure what you mean by ‘As always find a solution that no self-respecting tutor would accept from a run-of-the mill student’. I was a secondary school teacher for 30 years and was pleased to get ANY homework in the schools I worked in! Does this mean it has to be too clever, copied from the internet, done by a parent or an answer from SO? Like I say, I’ve only been a member for a short while and it will be a while before I have absorbed the culture.
+
+My attempt works sometimes! I have eschewed ready-made functions for an iterative approach but it doesn’t converge quickly enough yet (if at all).
+
+Anyway, if it’s not the sort of thing you want let me know and I’ll have another go or revise this to make it more interesting for the reader.
+
+Gary’s code is in Listing 3.
+
+#include <iostream>
+#include <vector>
+#include <string>
+//#include <algorithm>
+#include <numeric>
+
+double geometric_mean(std::vector<double> const& entries){
+  // Read on wikipedia that geometric mean always
+  // <= arithmetic mean so start with that
+  // Aslo read pow(product, 1/order) but wheres the
+  // fun in that?!
+  int order = entries.size();
+  double arith_mean =
+    std::accumulate(entries.begin(),
+    entries.end(),0.0)/order;
+  std::cout << "Arithmetic mean is: " 
+            << arith_mean << '\n';
+  double product = std::accumulate(entries.begin(),
+    entries.end(),1.0,std::multiplies<double>());
+  std::cout << "Product is: " << product << '\n';
+  double guess = arith_mean;
+  //return 1;
+  double delta(0.0005); // arbitrary accuracy
+  while(true){
+    double finish(1);  // multiplication identity
+    for(int index(0); index < order; ++index){
+      finish *= guess;
+    }
+    std::cout << "After for loop, finish is: " 
+      << finish << '\n';
+    double difference = finish - product;
+    std::cout << "Difference is: " << difference 
+      << '\n';
+    if(difference < 0){
+      double diff = -difference;
+    
+      if((diff - delta) < 0){
+        return guess; // close enough
+      }
+      else{
+  //guess += delta/order; // Must be negative
+  std::cout << "increasing\n";
+  guess += guess/order;
+      }
+    }
+    else if(difference - delta < 0){
+      return guess; // also close enough
+    }
+	    else{ // guess too big
+      //guess -= delta/order; // works but slow
+      std::cout << "decreasing\n";
+      guess -= guess/order;
+    }
+    std::cout << "New guess: " << guess << '\n';
+  }
+}
+int main(){
+  std::cout << "Enter numbers separated by "
+    "spaces  or enter them individually to "
+    "calculate the geometric mean.  Enter 'END' "
+    "to finish input.\n";
+  std::vector<double> entries;
+  std::string test;
+  while(std::cin.good()){
+    double entry;
+    std::cin >> entry;
+    if(!std::cin.fail()){
+      entries.push_back(entry);
+    }
+    else{
+      std::cin.clear();
+      std::cin >> test;
+      if(test == "END"){
+  std::cout << "Finished input\n";
+  // output result
+  double g_mean = geometric_mean(entries);
+  std::cout << "Geometric mean is: " << g_mean 
+    << '\n';
+  break;
+      }
+      else{
+  std::cout << "You entered " << test 
+    << " and I have no clue what that means so "
+      "I'm bailing out.";
+  break;
+      }
+    }
+  }
+}
+			
+Listing 3
+Francis: Thanks Gary. This is an interesting solution exactly because it is what I might expect from a hard-working and thoughtful student who tries to write from scratch. Libraries, and in particular standard libraries are there for use.
+
+Conclusion
+I appreciate that a great deal of work and time has been contributed developing each of the offerings. They persuade me that it is worth continuing so long as some of you find time and motivation to put your fingers to the keyboard and your creativity into gear.
+
+It is always so hard to choose (when given a choice). On balance the prize (I suspect that it is only a virtual one of a fully polished halo) goes to Tim.
+
+Homework Challenge 5
+Our lazy student wants a program that counts the number of occurrences of the word ‘the’ in a plain ascii text file. Can you oblige? Your submission can be too perfect, too obscure or, if you are still in the foothills of programming, just the best you can do.
+
+Have fun and be careful of the traps in the problem.
+
+Please send your solutions to francis.glassborow@btinternet.com by 31 July.
+
+Francis Glassborow Since retiring from teaching, Francis has edited C Vu, founded the ACCU conference and represented BSI at the C and C++ ISO committees. He is the author of two books: You Can Do It! and You Can Program in C++.
+
+
